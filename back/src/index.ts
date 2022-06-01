@@ -3,16 +3,24 @@ import http from "http";
 import cors from "cors";
 
 import routes from "./routes";
-import socket from "./socket";
+import { connection } from "./socket";
+
+const socketIo = require("socket.io");
 
 const port = process.env.PORT || 4001;
 
 const app = express();
-app.use(routes);
 app.use(cors());
+app.use(routes);
 
 export const server = http.createServer(app);
 
-socket();
+const io = socketIo(server, {
+    cors: {
+        origin: "*",
+    },
+});
+
+io.on("connection", connection);
 
 server.listen(port, () => console.log(`Server started port ${port}`));
