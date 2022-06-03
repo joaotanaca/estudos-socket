@@ -3,7 +3,7 @@ import http from "http";
 import cors from "cors";
 
 import routes from "./routes";
-import { connection } from "./socket";
+import { chat } from "./socket";
 
 const socketIo = require("socket.io");
 
@@ -21,6 +21,6 @@ const io = socketIo(server, {
     },
 });
 
-io.on("connection", connection);
+chat(io);
 
 server.listen(port, () => console.log(`Server started port ${port}`));

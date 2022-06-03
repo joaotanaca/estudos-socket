@@ -2,7 +2,7 @@ import axios from "axios";
 import io, { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 
-let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+export let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 const SOCKET_URL = "http://localhost:4001";
 
 export const initiateSocket = () => {
@@ -24,9 +24,7 @@ export const subscribeToMessages = (
         return;
     }
 
-    socket.on("NEW_MESSAGE", (data: any) => {
-        callback(null, data);
-    });
+    socket.on("NEW_MESSAGE", callback);
 };
 
 export const sendMessage = (data: any) => {
