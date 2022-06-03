@@ -4,7 +4,7 @@ import Messages from "./components/Messages";
 import MessageInput from "./components/MessageInput";
 
 import "./App.css";
-import handleMouseMove from "./helpes/trackMouse";
+import handleMouseMove from "./helper/trackMouse";
 
 function App() {
     const [socket, setSocket] = useState<Socket | null>(null);
@@ -14,7 +14,10 @@ function App() {
         setSocket(newSocket);
         window.addEventListener("mousemove", handleMouseMove);
 
-        return () => newSocket.close() as any;
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            newSocket.close() as any;
+        };
     }, [setSocket]);
 
     return (
