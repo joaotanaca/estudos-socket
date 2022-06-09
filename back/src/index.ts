@@ -4,8 +4,7 @@ import cors from "cors";
 
 import routes from "./routes";
 import { chat } from "./socket";
-
-const socketIo = require("socket.io");
+import { Server } from "socket.io";
 
 const port = process.env.PORT || 4001;
 
@@ -15,7 +14,7 @@ app.use(routes);
 
 export const server = http.createServer(app);
 
-const io = socketIo(server, {
+const io = new Server(server, {
     cors: {
         origin: "*",
     },

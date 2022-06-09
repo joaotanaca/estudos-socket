@@ -1,5 +1,13 @@
-function handleMouseMove(eventMouse: MouseEvent) {
-    console.log("X", eventMouse.clientX, "Y", eventMouse.clientY);
+import { Socket } from "socket.io-client";
+
+function handleMouseMove(socket: Socket, name: string) {
+    return (eventMouse: MouseEvent) => {
+        socket.emit("cursors", {
+            name,
+            x: eventMouse.clientX,
+            y: eventMouse.clientY,
+        });
+    };
 }
 
 export default handleMouseMove;
