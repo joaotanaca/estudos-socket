@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import Messages from "./components/Messages";
 import MessageInput from "./components/MessageInput";
@@ -7,44 +7,45 @@ import MessageInput from "./components/MessageInput";
 import "./App.css";
 import handleMouseMove from "./helper/trackMouse";
 import { v4 } from "uuid";
+import Mouse from "./components/Mouse";
 
 const id = v4();
 
 function App() {
     const [socket, setSocket] = useState<Socket>(null as any);
-    const [cursors, setCursors] = useState<{}>({});
+    const [cursors, setCursors] = useState<{ [key: string]: string }>({});
     const [name, setName] = useState<string>("");
 
     let timer: NodeJS.Timeout;
 
-    const cursorListener = (message: { id: string | number }) => {
-        if (message?.id === id) return null;
+    const cursorListener = useCallback(
+        (message: { id: string }) => {
+            console.clear();
+            console.log(message);
+            if (message?.id === id) {
+                return null;
+            }
 
-        setCursors((prevMessages) => {
-            const newMessages: any = { ...prevMessages };
-
-            newMessages[message.id] = message;
-            return newMessages;
-        });
-    };
+            setCursors(
+                (prevMessages) =>
+                    ({
+                        ...prevMessages,
+                        [message.id]: message,
+                    } as any),
+            );
+        },
+        [cursors, setCursors],
+    );
 
     const renderCursors = useMemo(
         () =>
             Object.keys(cursors).map((cursor) => (
-                <div
+                <Mouse
                     key={(cursors as any)[cursor].id}
-                    style={{
-                        width: 12,
-                        height: 18,
-                        backgroundColor: "red",
-                        position: "absolute",
-                        transform: "rotateZ(-20deg)",
-                        top: (cursors as any)[cursor].y,
-                        left: (cursors as any)[cursor].x,
-                    }}
-                >
-                    {/* {(cursors as any)[cursor].name} */}
-                </div>
+                    x={(cursors as any)[cursor].x}
+                    y={(cursors as any)[cursor].y}
+                    border={(cursors as any)[cursor].color}
+                />
             )),
         [cursors],
     );
