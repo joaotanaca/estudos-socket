@@ -13,6 +13,12 @@ function Messages({ socket }: any) {
             });
         };
 
+        const handleSetMessages = (messages: any[]) => {
+            console.log(messages);
+
+            setMessages(messages);
+        };
+
         const deleteMessageListener = (messageID: string | number) => {
             setMessages((prevMessages) => {
                 const newMessages: any = { ...prevMessages };
@@ -22,11 +28,13 @@ function Messages({ socket }: any) {
         };
 
         socket.on("message", messageListener);
+        socket.on("messages:get", handleSetMessages);
         socket.on("deleteMessage", deleteMessageListener);
-        socket.emit("getMessages");
+        socket.emit("messages:get");
 
         return () => {
             socket.off("message", messageListener);
+            socket.off("messages:get", handleSetMessages);
             socket.off("deleteMessage", deleteMessageListener);
         };
     }, [socket]);
