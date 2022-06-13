@@ -1,6 +1,5 @@
 import { Server, Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
-import generateRandomColor from "../helper/generateRandomColor";
 
 const messages = new Set();
 const cursors = new Map();
@@ -67,10 +66,10 @@ class Connection {
     }) {
         const id = this.socket.handshake?.query?.id as string;
 
-        const cursor = { ...values, id };
+        const cursor = Object.assign({}, values);
 
-        if (!cursor.color) {
-            cursor.color = generateRandomColor();
+        if (!cursor?.id) {
+            cursor.id = id;
         }
 
         cursors.set(id, cursor);
@@ -78,15 +77,7 @@ class Connection {
         this.sendCursor({ ...cursor });
     }
 
-    sendCursor(cursor: {
-        id: string;
-        name: string;
-        x: string;
-        y: string;
-        color?: string;
-    }) {
-        console.log(cursor);
-
+    sendCursor(cursor: { id: string; name: string; x: string; y: string }) {
         this.io.sockets.emit("cursors", cursor);
     }
 

@@ -8,6 +8,7 @@ import "./App.css";
 import handleMouseMove from "./helper/trackMouse";
 import { v4 } from "uuid";
 import Mouse from "./components/Mouse";
+import colors from "./helper/colors";
 
 const id = v4();
 
@@ -20,11 +21,7 @@ function App() {
 
     const cursorListener = useCallback(
         (message: { id: string }) => {
-            console.clear();
-            console.log(message);
-            if (message?.id === id) {
-                return null;
-            }
+            if (message?.id === id) return null;
 
             setCursors(
                 (prevMessages) =>
@@ -39,12 +36,12 @@ function App() {
 
     const renderCursors = useMemo(
         () =>
-            Object.keys(cursors).map((cursor) => (
+            Object.keys(cursors).map((cursor, index) => (
                 <Mouse
                     key={(cursors as any)[cursor].id}
                     x={(cursors as any)[cursor].x}
                     y={(cursors as any)[cursor].y}
-                    border={(cursors as any)[cursor].color}
+                    border={colors[index]}
                 />
             )),
         [cursors],
