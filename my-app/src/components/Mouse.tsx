@@ -1,4 +1,4 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import styled from "styled-components";
 import Cursor, { CursorsProps } from "./Icons/Cursor";
 
@@ -14,7 +14,7 @@ const Mouse: React.FC<MouseProps> = ({ border, ...containerProps }) => {
 
 export default Mouse;
 
-type ContainerProps = { x: string; y: string };
+type ContainerProps = { x: string; y: string } & HTMLAttributes<HTMLDivElement>;
 
 export const Container = styled.div.attrs<ContainerProps>(({ x, y }) => ({
     style: { top: y, left: x },
