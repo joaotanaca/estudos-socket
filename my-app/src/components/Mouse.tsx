@@ -4,6 +4,8 @@ import Cursor, { CursorsProps } from "./Icons/Cursor";
 
 type MouseProps = ContainerProps & CursorsProps;
 
+type ContainerProps = { x: string; y: string } & HTMLAttributes<HTMLDivElement>;
+
 const Mouse: React.FC<MouseProps> = ({ border, ...containerProps }) => {
     return (
         <Container {...containerProps}>
@@ -13,8 +15,6 @@ const Mouse: React.FC<MouseProps> = ({ border, ...containerProps }) => {
 };
 
 export default Mouse;
-
-type ContainerProps = { x: string; y: string } & HTMLAttributes<HTMLDivElement>;
 
 export const Container = styled.div.attrs<ContainerProps>(({ x, y }) => ({
     style: { top: y, left: x },
