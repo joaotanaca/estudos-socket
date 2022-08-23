@@ -48,7 +48,7 @@ function App() {
     );
 
     useEffect(() => {
-        const newSocket = io(`http://${window.location.hostname}:4001`, {
+        const newSocket = io(`http://localhost:4001`, {
             query: { id },
         });
         setSocket(newSocket);
